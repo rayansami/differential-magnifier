@@ -1,4 +1,4 @@
-# Welcome to Differential!
+# Welcome to Differential Magnifier!
 
 This magnifier is being developed by Sami. This extension is solely built for Google Chrome.
 
