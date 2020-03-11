@@ -31,15 +31,14 @@ let differentialMagnifier = function (){
     // Traverse the dom elements
     function getNodes(element){       
         if(element.localName != undefined){        
-            let tagName = element.localName; // HTML Tag name
-            /*
-                Create a JSON with the following properties:
-                # class/id 
-                # name_of_id/class
-                # font_size 
-            */ 
+            let tagName = element.localName; // HTML Tag name            
 
-            // Check if it is a valid element for text. TODO: Do it for images too        
+            // Check if it is a valid element for text. TODO: Do it for images too    
+            if(tagName == "img"){
+                // TODO: add image sizewise filter
+                $(element).addClass("zoom3947");
+            }   
+
             if(!isValidElement(tagName) && element.textContent.length > 0){
                 let fontSize = parseFloat(window.getComputedStyle(element).fontSize.replace("px",""));     
 
@@ -49,13 +48,20 @@ let differentialMagnifier = function (){
                 // If ID exists take the ID name. If not then take class names
                 let elementGetterAttrName = (element.id.length) > 0 ? element.id : element.className
 
+                /*
+                    Create a JSON with the following properties:
+                    # class/id 
+                    # name_of_id/class
+                    # font_size 
+                */ 
                 let objData = {                
                     "FontSize": fontSize,                           // Float value of font size
                     "ElementGetterAttrType": elementGetterAttrType, // 1 or 0
                     "ElementGetterAttrName": elementGetterAttrName  // Name of classes of id                   
                 };
 
-                /* In the array of Json, pushing the Class elements only once. 
+                /* 
+                   In the array of Json, pushing the Class elements only once. 
                    That's why I am cheking if a particular class is already existed in the array of JSON 
                 */
                 if(elementGetterAttrType === elementAttrType.ID){
@@ -171,5 +177,14 @@ let differentialMagnifier = function (){
                 zoomOut();
             }                 
         };
+
+
+        $(document).ready(function(){
+            $(".zoom3947").hover(function(){
+                $(this).css("transform","scale(1.5)");
+            },function(){
+                $(this).css("transform","scale(1)");
+            });
+        });
     }
 }();
