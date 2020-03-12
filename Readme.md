@@ -12,6 +12,9 @@ Please download the extention first and then follow the instructions:
 
 The extention will be added to your browser by now. If you change any code please save it and reload it from the extention window to get the impacts. 
 
+## So what problem does it solve?
+When you use browser zoom, ever wondered if the smallest ones gets zoomed out first? It would be great for the people with visual impairment. Well this extension is for you.
+
 ### How to use the zoom
     To Zoom-in Press: Ctrl + Shift + Up-Arrow 
     To Zoom-out Press: Ctrl + Shift + Down-Arrow 
