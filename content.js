@@ -35,6 +35,9 @@ let differentialMagnifier = function (){
 
             // Check if it is a valid element for text. TODO: Do it for images too    
             if(tagName == "img"){
+                /*
+                    Adds custom class on every image tag                
+                */
                 // TODO: add image sizewise filter
                 $(element).addClass("zoom3947");
             }   
@@ -65,8 +68,7 @@ let differentialMagnifier = function (){
                    That's why I am cheking if a particular class is already existed in the array of JSON 
                 */
                 if(elementGetterAttrType === elementAttrType.ID){
-                    //If ID is available push the JSON
-                    //console.log('Class push')
+                    //If ID is available push the JSON                    
                     data.push(objData);
                 }                                
                 
@@ -80,8 +82,7 @@ let differentialMagnifier = function (){
                         }
                     }
 
-                    if(!isClassAttrExistsAlready){
-                        //console.log('Class push')
+                    if(!isClassAttrExistsAlready){                        
                         data.push(objData);
                     }
                 }                
@@ -108,17 +109,23 @@ let differentialMagnifier = function (){
     }
 
     function zoomIn(){
-        console.log('hit Zoomin')
+        console.log('hit Zoomin');
         for(i=0; i < data.length ; i++){
             let randomFactor = Math.random();         
             console.log("Previous Font size:"+ data[i].FontSize);
-            data[i].FontSize =  data[i].FontSize+randomFactor;            
-            applyOnDocument(data[i])
+            data[i].FontSize =  data[i].FontSize + randomFactor;            
+            applyOnDocument(data[i]);
         }        
     }
     
     function zoomOut(){
-    
+        console.log('hit Zoomout');
+        for(i=0; i < data.length ; i++){
+            let randomFactor = Math.random();         
+            console.log("Previous Font size:"+ data[i].FontSize);
+            data[i].FontSize =  data[i].FontSize - randomFactor;            
+            applyOnDocument(data[i]);
+        }        
     }    
 
     function download(){        
@@ -161,6 +168,21 @@ let differentialMagnifier = function (){
         
     }
 
+    // For controlling zoom from extension UI. 
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+        if(request.zoom == "Plus"){
+            zoomIn();
+        }
+        
+        if(request.zoom == "Minus"){
+            zoomOut();
+        }            
+        
+        if (request.zoom == "Plus" || request.zoom == "Minus")
+            sendResponse({farewell: "working"});
+    });
+
     function registerEvents(){
         // When user press keys to zoom in/zoom out
         document.onkeydown = document.onkeyup = function (e) {
@@ -177,6 +199,7 @@ let differentialMagnifier = function (){
                 zoomOut();
             }                 
         };
+
 
 
         $(document).ready(function(){

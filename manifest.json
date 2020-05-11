@@ -11,6 +11,14 @@
         }
     ],
     "browser_action": {
-        "default_icon": "zoom.png"
-    }
+        "default_icon": "zoom.png",
+        "default_popup": "popup.html"
+    },
+    "permissions":[
+        "storage",
+        "tabs",
+        "notifications",
+        "http://*/",
+        "https://*/"
+    ]
 }
