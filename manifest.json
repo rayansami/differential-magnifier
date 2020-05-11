@@ -7,10 +7,18 @@
             "matches": [
                 "<all_urls>"
             ],
-            "js": ["jquery-3.4.1.min.js","content.js"]
+            "js": ["jquery-3.4.1.min.js","content.js"]           
         }
     ],
     "browser_action": {
-        "default_icon": "zoom.png"
-    }
+        "default_icon": "zoom.png",
+        "default_popup": "popup.html"
+    },
+    "permissions":[
+        "storage",
+        "tabs",
+        "notifications",
+        "http://*/",
+        "https://*/"
+    ]
 }
