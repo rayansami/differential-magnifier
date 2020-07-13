@@ -15,14 +15,13 @@ let differentialMagnifier = function (){
         CLASS: 0
     };
 
-    let hostName = window.location.hostname.substring(4);
-    let fileName = hostName + ".txt";
+    let hostName = window.location.hostname.substring(4);    
     let map = [];
 
     init();
     registerEvents();
 
-    // We do not need the elements that will not contain texts or images
+    // We do not need the elements that do not contain texts or images
     function isValidElement(elementName){
         let unwantedElements = ["html","script","title","style","noscript","link","meta","head"]
         return unwantedElements.includes(elementName); //Returns true if elementName is included in the list
@@ -36,7 +35,8 @@ let differentialMagnifier = function (){
             // Check if it is a valid element for text. TODO: Do it for images too    
             if(tagName == "img"){
                 /*
-                    Adds custom class on every image tag                
+                    Adds custom class on every image tag   
+                    This allows us to impose transform scale on them             
                 */
                 // TODO: add image sizewise filter
                 $(element).addClass("zoom3947");
@@ -63,15 +63,16 @@ let differentialMagnifier = function (){
                     "ElementGetterAttrName": elementGetterAttrName  // Name of classes of id                   
                 };
 
+                // Push the objects
+                if(elementGetterAttrType === elementAttrType.ID){
+                    //If ID is available push the JSON                    
+                    data.push(objData);
+                }                      
+                                
                 /* 
                    In the array of Json, pushing the Class elements only once. 
                    That's why I am cheking if a particular class is already existed in the array of JSON 
                 */
-                if(elementGetterAttrType === elementAttrType.ID){
-                    //If ID is available push the JSON                    
-                    data.push(objData);
-                }                                
-                
                 if(elementGetterAttrType === elementAttrType.CLASS){
                     //If ID is not available check if the classnames have been pushed before
                     let isClassAttrExistsAlready = 0;                    
@@ -89,11 +90,13 @@ let differentialMagnifier = function (){
             }        
         }
 
+        // Recusively traverse the childnodes
         element.childNodes.forEach(el => {            
             getNodes(el);
         }); 
     }
 
+    // Apply the newly calculated fontsize to the doc
     function applyOnDocument(obj){
         if(obj.ElementGetterAttrType === elementAttrType.ID){
             let element = document.getElementById(obj.ElementGetterAttrName)            
@@ -110,9 +113,12 @@ let differentialMagnifier = function (){
 
     function zoomIn(){
         console.log('hit Zoomin');
+        // Iterate through the data object and calculate the font size
         for(i=0; i < data.length ; i++){
+            // Generate a random number
             let randomFactor = Math.random();         
             console.log("Previous Font size:"+ data[i].FontSize);
+            // Add that random value to all the fonts in the object array
             data[i].FontSize =  data[i].FontSize + randomFactor;            
             applyOnDocument(data[i]);
         }        
@@ -127,30 +133,6 @@ let differentialMagnifier = function (){
             applyOnDocument(data[i]);
         }        
     }    
-
-    function download(){        
-        let file = new Blob([data.join('\n')],{type:"text/plain"});
-    
-        let a = document.createElement("a"),
-            url = URL.createObjectURL(file);
-        
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        
-        setTimeout(function(){
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 0);
-    }
-
-    /*Temporary function to check Json object value. TODO: Delete it after everything works*/
-    function checkJson(){
-        for(i= 0 ;i< data.length; i++){
-            console.log(data[i]);
-        }
-    }
 
     function init(){
         //TODO: Will get the current zoom level dynamically later. Setting hard coded value for zoom to 100%.
@@ -201,7 +183,8 @@ let differentialMagnifier = function (){
         };
 
 
-
+        // This will add css transform scale to all the images 
+        // Used like zoomed image while hovering
         $(document).ready(function(){
             $(".zoom3947").hover(function(){
                 $(this).css("transform","scale(1.5)");
